@@ -1,13 +1,83 @@
 UserConf
 ========
 
-Introduction goes here.
+ユーザごとの設定値をデータベースに保持する機能を追加するプラグイン
+Rails 3 のみに対応
 
 
-Example
-=======
+機能
+====
 
-Example goes here.
+- ？
 
 
-Copyright (c) 2011 [name of plugin creator], released under the MIT license
+準備
+====
+
+1. データベース・テーブル user_configurations を用意する
+
+  下記のコマンドでマイグレーション・ファイルを生成。
+
+    $ rails generate model UserConfigurationName
+    $ rails generate model UserConfigurationValue
+
+  内容をそれぞれ下記のようにする。
+
+  ==> db/migrate/##############_create_user_configuraion_names.rb <==
+
+    class CreateUserConfiguraionNames < ActiveRecord::Migration
+      def self.up
+        create_table :user_configuration_names do |t|
+          t.string :name, :null => false
+          t.string :type, :null => false, :default => String
+
+          t.timestamps
+        end
+      end
+
+      def self.down
+        drop_table :user_configuration_names
+      end
+    end
+
+  ==> db/migrate/##############_create_user_configuraion_values.rb <==
+
+    class CreateUserConfiguraionValues < ActiveRecord::Migration
+      def self.up
+        create_table :user_configuration_values do |t|
+          t.reference :user                   , :null => false
+          t.reference :user_configuration_name, :null => false
+          t.string    :value
+
+          t.timestamps
+        end
+      end
+
+      def self.down
+        drop_table :user_configuration_values
+      end
+    end
+
+
+使用方法
+========
+
+(1)
+
+
+スクリプトの一覧
+================
+
+
+トラブルシューティング
+======================
+
+
+ファイル
+========
+
+インストールされるファイルは以下のとおり。
+
+
+Copyright (c) 2011 [Japan Petroleum Exploration co., ltd.], released under the MIT license
+
