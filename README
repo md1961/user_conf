@@ -45,9 +45,9 @@ Rails 3 のみに対応
     class CreateUserConfigurationValues < ActiveRecord::Migration
       def self.up
         create_table :user_configuration_values do |t|
-          t.reference :user                   , :null => false
-          t.reference :user_configuration_name, :null => false
-          t.string    :value
+          t.references :user                   , :null => false
+          t.references :user_configuration_name, :null => false
+          t.string     :value
 
           t.timestamps
         end
@@ -57,7 +57,6 @@ Rails 3 のみに対応
         drop_table :user_configuration_values
       end
     end
-
 
 使用方法
 ========
