@@ -28,8 +28,8 @@ Rails 3 のみに対応
     class CreateUserConfigurationNames < ActiveRecord::Migration
       def self.up
         create_table :user_configuration_names do |t|
-          t.string :name, :null => false
-          t.string :type, :null => false, :default => 'String'
+          t.string :name , :null => false
+          t.string :clazz, :null => false, :default => 'String'
 
           t.timestamps
         end
@@ -39,6 +39,10 @@ Rails 3 のみに対応
         drop_table :user_configuration_names
       end
     end
+
+  （:type はカラム名に使えないことに注意。上記では代わりに :clazz を
+    使っている。:type を使うと ActiveRecord::Base#find() 系のメソッドの
+    呼び出し時にエラーが発生する。）
 
   ==> db/migrate/##############_create_user_configuraion_values.rb <==
 
@@ -57,6 +61,28 @@ Rails 3 のみに対応
         drop_table :user_configuration_values
       end
     end
+
+2. モデルの関連を設定する
+
+  ==> app/models/user_configuration_name.rb <==
+
+    class UserConfigurationName < ActiveRecord::Base
+      has_many :user_configuration_values
+    end
+
+  ==> app/models/user_configuration_value.rb <==
+
+    class UserConfigurationValue < ActiveRecord::Base
+      belongs_to :user
+      belongs_to :user_configuration_name
+    end
+
+  ==> app/models/user.rb <==
+
+    class User < UserAuthKuma::User
+      has_many :user_configuration_values
+    end
+
 
 使用方法
 ========
