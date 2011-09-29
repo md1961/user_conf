@@ -25,11 +25,11 @@ Rails 3 のみに対応
 
   ==> db/migrate/##############_create_user_configuraion_names.rb <==
 
-    class CreateUserConfiguraionNames < ActiveRecord::Migration
+    class CreateUserConfigurationNames < ActiveRecord::Migration
       def self.up
         create_table :user_configuration_names do |t|
           t.string :name, :null => false
-          t.string :type, :null => false, :default => String
+          t.string :type, :null => false, :default => 'String'
 
           t.timestamps
         end
@@ -42,7 +42,7 @@ Rails 3 のみに対応
 
   ==> db/migrate/##############_create_user_configuraion_values.rb <==
 
-    class CreateUserConfiguraionValues < ActiveRecord::Migration
+    class CreateUserConfigurationValues < ActiveRecord::Migration
       def self.up
         create_table :user_configuration_values do |t|
           t.reference :user                   , :null => false
