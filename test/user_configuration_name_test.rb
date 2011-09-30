@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserConfigurationNameTest < ActiveSupport::TestCase
 
-  NAME = 'name1'
+  NAME = 'hoge'
 
   def setup
     @obj_name = UserConfigurationName.new(name: NAME)
@@ -15,6 +15,20 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
   def test_has_many_user_configuration_values_for_type_mismatch
     assert_raise(ActiveRecord::AssociationTypeMismatch) do
       @obj_name.user_configuration_values << Object.new
+    end
+  end
+
+  VALUES = %w(one two three)
+
+  def test_has_many_user_configuration_values
+    VALUES.each do |value|
+      @obj_name.user_configuration_values << UserConfigurationValue.new(value: value)
+    end
+
+    VALUES.each_with_index do |value, index|
+      obj_value = @obj_name.user_configuration_values[index]
+      assert_not_nil(obj_value, "user_configuration_values[#{index}] should be non-nil")
+      assert_equal(value, obj_value.value, "user_configuration_values[#{index}].value")
     end
   end
 
