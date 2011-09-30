@@ -27,5 +27,9 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
     other = UserConfigurationName.new(name: NAME + 'a')
     assert(! @obj_name.eql?(other), "eql?() should be false with different names")
   end
+
+  def test_hash
+    assert_equal(NAME.hash, @obj_name.hash, "UserConfigurationName#hash()")
+  end
 end
 
