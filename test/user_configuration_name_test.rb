@@ -17,5 +17,15 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
     other = UserConfigurationName.new(name: NAME + 'a')
     assert(@obj_name != other, "== should be false with different names")
   end
+
+  def test_eql_q
+    other = UserConfigurationName.new(name: NAME)
+    assert(@obj_name.eql?(other), "eql?() should be true with a same name")
+  end
+
+  def test_eql_q_for_false
+    other = UserConfigurationName.new(name: NAME + 'a')
+    assert(! @obj_name.eql?(other), "eql?() should be false with different names")
+  end
 end
 
