@@ -8,6 +8,10 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
     @obj_name = UserConfigurationName.new(name: NAME)
   end
 
+  def test_has_many_user_configuration_values_for_emptiness
+    assert_equal([], @obj_name.user_configuration_values, "New UserConfigurationName's user_configuration_values")
+  end
+
   def test_equality_operator
     other = UserConfigurationName.new(name: NAME)
     assert(@obj_name == other, "== should be true with a same name")
