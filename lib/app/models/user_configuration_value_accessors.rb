@@ -39,6 +39,9 @@ module UserConfigurationValueAccessors
     obj_value.value = Marshal.dump(value)
     obj_value.save!
 
+    # DB から読み直して、たった今設定した UserConfigurationValue を反映させる
+    reload
+
     nil
   end
 end
