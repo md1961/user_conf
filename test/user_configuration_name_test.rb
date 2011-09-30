@@ -12,6 +12,12 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
     assert_equal([], @obj_name.user_configuration_values, "New UserConfigurationName's user_configuration_values")
   end
 
+  def test_has_many_user_configuration_values_for_type_mismatch
+    assert_raise(ActiveRecord::AssociationTypeMismatch) do
+      @obj_name.user_configuration_values << Object.new
+    end
+  end
+
   def test_equality_operator
     other = UserConfigurationName.new(name: NAME)
     assert(@obj_name == other, "== should be true with a same name")
