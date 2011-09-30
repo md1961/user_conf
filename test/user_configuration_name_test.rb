@@ -18,6 +18,18 @@ class UserConfigurationNameTest < ActiveSupport::TestCase
     end
   end
 
+  def test_validates_name_for_uniqueness
+    @obj_name.save!
+
+    assert_raise(ActiveRecord::RecordInvalid) do
+      UserConfigurationName.create!(name: NAME)
+    end
+
+    assert_nothing_raised do
+      UserConfigurationName.create!(name: NAME + 'a')
+    end
+  end
+
   VALUES = %w(one two three)
 
   def test_has_many_user_configuration_values
