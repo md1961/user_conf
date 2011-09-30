@@ -38,6 +38,12 @@ class UserConfigurationValueAccessorsTest < ActiveSupport::TestCase
     end
   end
 
+  def test_set_with_different_type
+    assert_raise(TypeError) do
+      @user.set_conf_value(NAME, Object.new)
+    end
+  end
+
   class UserDefinedClass
     attr_reader :value
 
