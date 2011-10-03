@@ -13,7 +13,7 @@ module UserConfigurationValueAccessors
   # <em>name</em> :: 取得する設定値の名称
   # 返り値 :: ユーザ設定値
   def get_conf_value(name)
-    obj_name = get_user_configuration_name(name)
+    obj_name = UserConfiguration.get_user_configuration_name(name)
     obj_value = user_configuration_values.detect { |value| value.user_configuration_name == obj_name }
 
     return obj_value && Marshal.load(obj_value.value)
@@ -23,7 +23,7 @@ module UserConfigurationValueAccessors
   # <em>name</em> :: 設定する設定値の名称
   # <em>value</em> :: 設定する設定値
   def set_conf_value(name, value)
-    obj_name = get_user_configuration_name(name)
+    obj_name = UserConfiguration.get_user_configuration_name(name)
     clazz_name = obj_name.clazz
     obj_value = user_configuration_values.detect { |value| value.user_configuration_name == obj_name }
 
@@ -46,14 +46,5 @@ module UserConfigurationValueAccessors
 
     nil
   end
-
-  private
-
-    def get_user_configuration_name(name)
-      obj_name = UserConfigurationName.find_by_name(name.to_s)
-      raise NameError, "No value entry with a name of '#{name}'" unless obj_name
-
-      return obj_name
-    end
 end
 

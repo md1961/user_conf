@@ -1,6 +1,8 @@
 # ユーザ設定値の入出力を司るラッパー・クラス
 class UserConfiguration
 
+  @@names = Array.new
+
   def initialize(user)
     raise "Argument user must be a User" unless user.is_a?(User)
     @user = user
@@ -8,20 +10,25 @@ class UserConfiguration
 
   # UserConfigurationName に定義された名称の配列を返す
   def self.names
-    return UserConfigurationName.all.map(&:name).map(&:to_sym)
+    return @@names
   end
 
   # UserConfigurationName に名称を設定して、User#get_conf_value()、
   # User#set_conf_value() に渡す名称に使用できるようにする
   # <em>names</em> :: 設定する名称（String または Symbol）の配列
   def self.names=(names)
-    names.map(&:to_s).each do |name|
-      next if UserConfigurationName.find_by_name(name)
-      UserConfigurationName.create!(name: name)
+    @@names = names.map(&:to_sym)
+    @@names.map(&:to_s).each do |name|
       create_getter_and_setter(name)
     end
 
     nil
+  end
+
+  def self.get_user_configuration_name(name)
+    raise NameError, "No value entry with a name of '#{name}'" unless @@names.include?(name.to_sym)
+
+    return UserConfigurationName.find_by_name(name.to_s) || UserConfigurationName.create!(name: name.to_s)
   end
 
   # 設定値の所属先であるユーザを返す
