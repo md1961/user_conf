@@ -13,11 +13,22 @@ Rails 3 のみに対応
   set_conf_value(name, value) -> nil
     name という名称で値 value を格納する。
     value は Marshal.dump が可能なオブジェクトであれば何でもよい。
-    既に値が格納済みで、異なるクラスの値を上書きしようとすると TypeError が投げられる。
+    値が非nil値で、異なるクラスの値を上書きしようとすると TypeError が投げられる
 
   get_conf_value(name) -> Object
     name という名称を持つ値を返す。
-    name という名称を持つ値をどの User も格納していなかった場合は NameError が投げられる。
+    name という名称の使用を設定していなかった場合は NameError が投げられる
+
+使用に先だって、下記メソッドを使って使用する名称を登録しておく必要がある。
+
+  UserConfiguration.names=(names) -> nil
+    String、または Symbol の配列を渡して、使用する名称を登録する
+
+このメソッドを用いて、たとえば an_attribute という名称を登録すると、
+UserConfiguration にゲッター an_attribute とセッター an_attribute= が定義される。
+UserConfiguration#user=()、または UserConfiguration#user_id=() を用いて
+User のインスタンスを設定しておけば上記ゲッター／セッターが使用できる。
+
 
 準備
 ====

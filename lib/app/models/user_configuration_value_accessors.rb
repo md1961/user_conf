@@ -1,3 +1,5 @@
+# ユーザ設定値を設定・取得するメソッドを提供するモジュール。
+# クラス User に include して使用する
 module UserConfigurationValueAccessors
   extend ActiveSupport::Concern
 
@@ -5,6 +7,11 @@ module UserConfigurationValueAccessors
     has_many :user_configuration_values
   end
 
+  # ユーザ設定値を取得する。
+  # 設定されていない場合は nil を返すので、設定値が nil の場合と
+  # 区別することはできない
+  # <em>name</em> :: 取得する設定値の名称
+  # 返り値 :: ユーザ設定値
   def get_conf_value(name)
     obj_name = get_user_configuration_name(name)
     obj_value = user_configuration_values.detect { |value| value.user_configuration_name == obj_name }
@@ -12,6 +19,9 @@ module UserConfigurationValueAccessors
     return obj_value && Marshal.load(obj_value.value)
   end
 
+  # ユーザ設定値を設得する
+  # <em>name</em> :: 設定する設定値の名称
+  # <em>value</em> :: 設定する設定値
   def set_conf_value(name, value)
     obj_name = get_user_configuration_name(name)
     clazz_name = obj_name.clazz

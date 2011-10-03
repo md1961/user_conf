@@ -1,3 +1,4 @@
+# ユーザ設定値の名称を保持する ActiveRecord クラス
 class UserConfigurationName < ActiveRecord::Base
   has_many :user_configuration_values
 
