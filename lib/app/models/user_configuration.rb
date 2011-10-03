@@ -1,6 +1,11 @@
 # ユーザ設定値の入出力を司るラッパー・クラス
 class UserConfiguration
 
+  def initialize(user)
+    raise "Argument user must be a User" unless user.is_a?(User)
+    @user = user
+  end
+
   # UserConfigurationName に定義された名称の配列を返す
   def self.names
     return UserConfigurationName.all.map(&:name).map(&:to_sym)
