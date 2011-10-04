@@ -4,8 +4,7 @@ class UserConfiguration
   @@names = Array.new
 
   def initialize(user)
-    raise "Argument user must be a User" unless user.is_a?(User)
-    @user = user
+    self.user = user
   end
 
   # UserConfigurationName に定義された名称の配列を返す
@@ -29,6 +28,11 @@ class UserConfiguration
     raise NameError, "No value entry with a name of '#{name}'" unless @@names.include?(name.to_sym)
 
     return UserConfigurationName.find_by_name(name.to_s) || UserConfigurationName.create!(name: name.to_s)
+  end
+
+  # 設定値の所属先であるユーザの ID を返す
+  def id
+    return @user.id
   end
 
   # 設定値の所属先であるユーザを返す
