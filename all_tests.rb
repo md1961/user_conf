@@ -1,10 +1,8 @@
 require 'test_helper'
 
-[
-  'user_configuration_name_test',
-  'user_configuration_value_test',
-  'user_configuration_value_accessors_test',
-].each do |basename|
-  require File.join(File.dirname(__FILE__), 'test', basename)
+TEST_DIR = File.join(File.dirname(__FILE__), 'test')
+
+Dir.entries(TEST_DIR).grep(/_test\.rb$/).each do |filename|
+  require File.join(TEST_DIR, filename)
 end
 
