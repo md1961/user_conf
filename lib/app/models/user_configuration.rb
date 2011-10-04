@@ -6,7 +6,7 @@ class UserConfiguration
   @@names = Array.new
 
   def initialize(attributes)
-    user_id = attributes[:user_id]
+    user_id = attributes.delete(:user_id)
     raise ArgumentError, "No entry for :user_id in argument attributes" unless user_id
 
     begin
@@ -16,6 +16,15 @@ class UserConfiguration
     end
 
     self.user = user
+
+    @h_attributes = attributes
+  end
+
+  def save!
+    @h_attributes.each do |name, value|
+      obj_name = UserConfiguration.get_user_configuration_name(name)
+      
+    end
   end
 
   # UserConfigurationName に定義された名称の配列を返す
