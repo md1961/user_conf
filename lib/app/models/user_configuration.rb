@@ -1,9 +1,20 @@
 # ユーザ設定値の入出力を司るラッパー・クラス
 class UserConfiguration
+  extend  ActiveModel::Naming
+  include ActiveModel::Conversion
 
   @@names = Array.new
 
-  def initialize(user)
+  def initialize(attributes)
+    user_id = attributes[:user_id]
+    raise ArgumentError, "No entry for :user_id in argument attributes" unless user_id
+
+    begin
+      user = User.find(user_id)
+    rescue ActiveRecord::RecordNotFound => e
+      raise ArgumentError, "Cannot find a User with id = #{user_id}"
+    end
+
     self.user = user
   end
 
@@ -24,20 +35,28 @@ class UserConfiguration
     nil
   end
 
+  # 引数 name に対応する UserConfigurationName のインスタンスを返す
+  # <em>name</em> :: 名称
+  # 返り値 :: UserConfigurationName のインスタンス
   def self.get_user_configuration_name(name)
     raise NameError, "No value entry with a name of '#{name}'" unless @@names.include?(name.to_sym)
 
     return UserConfigurationName.find_by_name(name.to_s) || UserConfigurationName.create!(name: name.to_s)
   end
 
-  # 設定値の所属先であるユーザの ID を返す
-  def id
-    return @user.id
-  end
-
   # 設定値の所属先であるユーザを返す
   def user
     return @user
+  end
+
+  # 設定値の所属先であるユーザの ID を返す
+  def user_id
+    return @user.id
+  end
+
+  # インスタンスが永続化されているかどうかを評価し、常に false を返す
+  def persisted?
+    return false
   end
 
   # 設定値の所属先であるユーザを設定する

@@ -2,10 +2,27 @@ require 'test_helper'
 
 class UserConfigurationTest < ActiveSupport::TestCase
 
+  def setup
+    @user = User.create!(name: 'whoever', password: 'whatever')
+  end
+
+  def test_initialize_with_no_user_id
+    assert_raise(ArgumentError, "ArgumentError if no :user_id in argument attributes") do
+      UserConfiguration.new({})
+    end
+  end
+
+  UNLIKELY_PERSISTENT_ID = 0
+
+  def test_initialize_with_unknown_user_id
+    assert_raise(ArgumentError, "ArgumentError if no User with :user_id in argument attributes") do
+      UserConfiguration.new(:user_id => UNLIKELY_PERSISTENT_ID)
+    end
+  end
+
   def test_initialize
-    user = User.new
-    uc = UserConfiguration.new(user)
-    assert_equal(user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
+    uc = UserConfiguration.new(:user_id => @user.id)
+    assert_equal(@user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
   end
 
   NAMES = [:name_first, :name_second, :name_third]
@@ -18,7 +35,7 @@ class UserConfigurationTest < ActiveSupport::TestCase
   def test_self_names_eq_for_creating_getter_and_setter
     UserConfiguration.names = [:an_attribute]
 
-    uc = UserConfiguration.new(User.create!(name: 'whoever', password: 'whatever'))
+    uc = UserConfiguration.new(:user_id => @user.id)
 
     the_value = :the_value_you_never_guess
     uc.an_attribute = the_value
@@ -26,23 +43,20 @@ class UserConfigurationTest < ActiveSupport::TestCase
   end
 
   def test_user
-    user = User.new
-    uc = UserConfiguration.new(user)
-    assert_equal(user, uc.user, "UserConfiguration.user()")
+    uc = UserConfiguration.new(:user_id => @user.id)
+    assert_equal(@user, uc.user, "UserConfiguration.user()")
   end
 
   def test_user_eq
-    user = User.new
-    uc = UserConfiguration.new(User.new)
-    uc.user = user
-    assert_equal(user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
+    uc = UserConfiguration.new(:user_id => @user.id)
+    uc.user = @user
+    assert_equal(@user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
   end
 
   def test_user_id_eq
-    user = User.create!(name: 'whoever', password: 'whatever')
-    uc = UserConfiguration.new(User.new)
-    uc.user_id = user.id
-    assert_equal(user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
+    uc = UserConfiguration.new(:user_id => @user.id)
+    uc.user_id = @user.id
+    assert_equal(@user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
   end
 end
 
