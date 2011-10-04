@@ -8,19 +8,11 @@ class UserConfigurationTest < ActiveSupport::TestCase
     assert_equal(user, uc.instance_variable_get(:@user), "@user of UserConfiguration")
   end
 
-  def test_self_names
-    assert_equal([], UserConfiguration.names, "UserConfiguration.names() without setting any names")
-  end
-
   NAMES = [:name_first, :name_second, :name_third]
 
-  def test_self_names_eq
+  def test_self_names_eq_and_self_names
     UserConfiguration.names = NAMES
-
     assert_equal(NAMES.sort, UserConfiguration.names.sort, "UserConfiguration.names() after setting one")
-    NAMES.each do |name|
-      assert_not_nil(UserConfigurationName.find_by_name(name.to_s), "UserConfigurationName with a name of '#{name}' should exist")
-    end
   end
 
   def test_self_names_eq_for_creating_getter_and_setter
